@@ -31,18 +31,21 @@ export const Product = ({ info }) => {
       className=" space-y-3 min-h-[609.656px]"
       ref={ref}
       initial={{ opacity: 0 }}
-      animate={{ opacity: isProductVisible ? 1 : 0 }}
+      animate={{ opacity: isImageLoaded ? 1 : 0 }}
+      transition={{ delay: 1.2 }}
     >
-      <div>
-        <motion.img
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isProductVisible && isImageLoaded ? 1 : 0 }}
-          transition={{ ease: "easeIn", delay: 1 }}
-          src={info.images[0].baseUrl}
-          alt={`${info.name} image`}
-          onLoad={() => setIsImageLoaded(true)}
-        />
-      </div>
+      {isProductVisible && (
+        <div>
+          <motion.img
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            src={info.images[0].baseUrl}
+            alt={`${info.name} image`}
+            onLoad={() => setIsImageLoaded(true)}
+          />
+        </div>
+      )}
 
       {!isImageLoaded && <div className=" min-h-[460px]"></div>}
 
