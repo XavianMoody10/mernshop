@@ -5,14 +5,14 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { Home } from "./pages/Home/Home";
+import { Shop } from "./pages/Shop/Shop";
 
 const App = () => {
   // Routes and pages
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
-        <Route index element={<Home />} />
+        <Route index element={<Shop />} />
       </Route>
     )
   );
