@@ -1,7 +1,23 @@
 import React from "react";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import { Home } from "./pages/Home/Home";
 
 const App = () => {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  // Routes and pages
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/">
+        <Route index element={<Home />} />
+      </Route>
+    )
+  );
+
+  return <RouterProvider router={router} />;
 };
 
 export default App;
