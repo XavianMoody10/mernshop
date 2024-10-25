@@ -33,7 +33,7 @@ export const Shop = () => {
       <Header />
 
       <main className=" max-w-[1700px] mx-auto">
-        <section className=" p-3 space-y-16 md:p-0" id="products-market">
+        <section className=" py-3 space-y-16" id="products-market">
           <div className=" grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-9 xl:grid-cols-4 2xl:grid-cols-5">
             {displayProducts}
           </div>
