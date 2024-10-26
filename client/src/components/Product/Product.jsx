@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useSelector, useDispatch } from "react-redux";
+import { updateCart } from "../../store/features/cart/cartSlice";
 
 export const Product = ({ info }) => {
   const [isProductVisible, setIsProductVisible] = useState(false);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isProductActive, setIsProductActive] = useState(true);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const cart = useSelector((state) => state.cart.value);
+  const dispatch = useDispatch();
 
   const ref = useRef(null);
 
@@ -27,6 +32,17 @@ export const Product = ({ info }) => {
   useEffect(() => {
     intersectionObserveProduct();
   }, [ref]);
+
+  function addItemToCart() {
+    const newItem = {
+      code: info.code,
+      name: info.name,
+      price: info.price.value * quantity,
+      quanity: quantity,
+    };
+
+    dispatch(updateCart([...cart, newItem]));
+  }
 
   return (
     <>
@@ -56,7 +72,23 @@ export const Product = ({ info }) => {
 
           <p className=" font-semibold text-center">{info.name}</p>
           <p className=" text-xl text-center">${info.price.value}</p>
-          <button className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable">
+          <select
+            name="quantity"
+            id="quanity"
+            className=" border w-full py-2 shadow-sm hover:shadow-md duration-150 font-semibold text-center"
+            onChange={(e) => setQuantity(Number(e.target.value))}
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+
+          <button
+            className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable"
+            onClick={addItemToCart}
+          >
             Add To Cart
           </button>
         </motion.div>
