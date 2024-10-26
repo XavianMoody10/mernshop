@@ -37,11 +37,23 @@ export const Product = ({ info }) => {
     const newItem = {
       code: info.code,
       name: info.name,
-      price: info.price.value * quantity,
-      quanity: quantity,
+      price: info.price.value,
+      quantity: quantity,
     };
 
     dispatch(updateCart([...cart, newItem]));
+  }
+
+  function updateItemInCart() {
+    const updatedCart = cart.map((i) => {
+      if (i.code === info.code) {
+        return { ...i, quantity: quantity };
+      } else {
+        return { ...i };
+      }
+    });
+
+    dispatch(updateCart(updatedCart));
   }
 
   return (
@@ -85,12 +97,21 @@ export const Product = ({ info }) => {
             <option value="5">5</option>
           </select>
 
-          <button
-            className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable"
-            onClick={addItemToCart}
-          >
-            Add To Cart
-          </button>
+          {cart.some((i) => i.code === info.code) ? (
+            <button
+              className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable"
+              onClick={updateItemInCart}
+            >
+              Update
+            </button>
+          ) : (
+            <button
+              className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable"
+              onClick={addItemToCart}
+            >
+              Add To Cart
+            </button>
+          )}
         </motion.div>
       )}
     </>
