@@ -74,7 +74,7 @@ export const Cart = () => {
                 {displayCartItems}
               </div>
 
-              <div className=" sticky top-[110px] h-fit space-y-4 border p-5 w-full lg:max-w-[300px]">
+              <div className=" sticky top-[110px] h-fit space-y-4 border p-5 w-full lg:max-w-[300px] 2xl:max-w-[400px]">
                 <h2 className=" text-2xl font-extrabold text-center">
                   Cart Summary
                 </h2>
