@@ -18,7 +18,7 @@ export const Header = () => {
         </Link>
 
         <div className=" flex gap-1 lg:gap-3">
-          <Link className="/auth/login">
+          <Link to={"/auth/login"}>
             <User size={30} />
           </Link>
 
