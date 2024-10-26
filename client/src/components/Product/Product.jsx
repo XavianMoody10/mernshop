@@ -56,7 +56,7 @@ export const Product = ({ info }) => {
 
           <p className=" font-semibold text-center">{info.name}</p>
           <p className=" text-xl text-center">${info.price.value}</p>
-          <button className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold">
+          <button className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable">
             Add To Cart
           </button>
         </motion.div>
