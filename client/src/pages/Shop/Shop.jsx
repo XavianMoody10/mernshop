@@ -5,26 +5,28 @@ import { Product } from "../../components/Product/Product";
 import Pagination from "@mui/material/Pagination";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCategoriesRequest } from "../../services/categories.services";
+import { IoIosSearch as Search } from "react-icons/io";
 
 export const Shop = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [categoryOption, setCategoryOption] = useState("");
-  const { page, category } = useParams();
+  const [searchValue, setSearchValue] = useState("");
+  const { page, category, search } = useParams();
   const navigate = useNavigate();
 
   // Get products from api
   async function getProducts() {
     setProducts([]);
-    const data = await getProductsRequest(page, category);
+    const data = await getProductsRequest(page, category, search);
     setProducts(data.results);
     setNumberOfPages(data.pagination.numberOfPages);
   }
 
   useEffect(() => {
     getProducts();
-  }, [page, category]);
+  }, [page, category, search]);
 
   // Get categories from api
   async function getCategories() {
@@ -61,22 +63,37 @@ export const Shop = () => {
 
       <main className=" max-w-[1700px] mx-auto">
         <section className=" p-3" id="products-market">
-          <div className=" flex items-center gap-2">
+          <div className=" flex flex-col items-center gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 md:flex md:flex-row">
             <select
               name="categories"
               id="categories"
-              className=" border p-3 text-lg w-full max-w-[200px]"
+              className=" border p-3 w-full max-w-[200px]"
               onChange={(e) => setCategoryOption(e.target.value)}
             >
               <option value={""}>Categories</option>
               {displayCategories}
             </select>
 
+            <div className=" flex items-center justify-between border w-full md:max-w-[500px]">
+              <input
+                type="text"
+                placeholder="Search"
+                id="filter-search"
+                className=" outline-none w-full h-full p-3 bg-transparent"
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+              <Search size={22} />
+            </div>
+
             <button
               onClick={() =>
-                navigate(`/shop/${1}${categoryOption && "/" + categoryOption}`)
+                navigate(
+                  `/shop/${1}${categoryOption && "/" + categoryOption}${
+                    searchValue && "/" + searchValue
+                  }`
+                )
               }
-              className="  border p-3 text-lg w-full max-w-[150px] shadow-sm hover:shadow-md duration-150"
+              className="  border p-3 w-full shadow-sm font-notable hover:shadow-md duration-150 sm:col-span-2 md:col-auto md:max-w-[150px]"
             >
               Filter
             </button>

@@ -8,8 +8,9 @@ export const handlers = [
     const url = new URL(request.url);
     const page = url.searchParams.get("page");
     const category = url.searchParams.get("category");
+    const search = url.searchParams.get("search");
 
-    if (page === "1" && category === "men_all") {
+    if (page === "1" && category === "men_all" && search === "slim") {
       return HttpResponse.json(productsListPage2Data);
     } else {
       return HttpResponse.json(productsListData);

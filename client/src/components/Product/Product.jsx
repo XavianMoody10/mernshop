@@ -9,7 +9,7 @@ export const Product = ({ info }) => {
   const ref = useRef(null);
 
   function intersectionObserveProduct() {
-    const options = { threshold: 0.2 };
+    const options = { threshold: 0.3, rootMargin: "0px 0px 150px 0px" };
 
     function callback(entries, observer) {
       entries.forEach((entry) => {
@@ -26,7 +26,7 @@ export const Product = ({ info }) => {
 
   useEffect(() => {
     intersectionObserveProduct();
-  }, []);
+  }, [ref]);
 
   return (
     <>
@@ -36,14 +36,14 @@ export const Product = ({ info }) => {
           ref={ref}
           initial={{ opacity: 0 }}
           animate={{ opacity: isImageLoaded ? 1 : 0 }}
-          transition={{ delay: 1.2 }}
+          transition={{ delay: 1 }}
         >
           {isProductVisible && (
             <div>
               <motion.img
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
+                transition={{ delay: 1.3 }}
                 src={info.images[0].baseUrl || info.images[0].url}
                 alt={`${info.name} image`}
                 onLoad={() => setIsImageLoaded(true)}
