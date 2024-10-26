@@ -1,19 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { Header } from "../../layouts/Header";
 import { getProductsRequest } from "../../services/products.services";
 import { Product } from "../../components/Product/Product";
 import Pagination from "@mui/material/Pagination";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCategoriesRequest } from "../../services/categories.services";
-import { IoIosSearch as Search } from "react-icons/io";
+import { Filter } from "../../components/Filter/Filter";
+
+function filterReducer(state, action) {
+  switch (action.type) {
+    case "set_category": {
+      return {
+        ...state,
+        categoryOption: action.payload,
+      };
+    }
+
+    case "set_sortby": {
+      return {
+        ...state,
+        sortByOption: action.payload,
+      };
+    }
+
+    case "set_search": {
+      return {
+        ...state,
+        searchValue: action.payload,
+      };
+    }
+  }
+}
 
 export const Shop = () => {
+  const [filterState, filterDispatch] = useReducer(filterReducer, {
+    categoryOption: "",
+    sortByOption: "",
+    searchValue: "",
+  });
+
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [numberOfPages, setNumberOfPages] = useState(1);
-  const [categoryOption, setCategoryOption] = useState("");
-  const [sortByOption, setSortByOption] = useState("");
-  const [searchValue, setSearchValue] = useState("");
   const { page, category, search, sortby } = useParams();
   const navigate = useNavigate();
 
@@ -29,33 +55,9 @@ export const Shop = () => {
     getProducts();
   }, [page, category, search, sortby]);
 
-  // Get categories from api
-  async function getCategories() {
-    const data = await getCategoriesRequest();
-    setCategories(data);
-  }
-
-  useEffect(() => {
-    getCategories();
-  }, []);
-
   // Diplay All Products
   const displayProducts = products.map((p) => {
     return <Product key={p.code} info={p} />;
-  });
-
-  // Diplay All Categories
-  const displayCategories = categories.map((c) => {
-    return (
-      <option
-        key={c.CatName}
-        value={c.tagCodes[0]}
-        id={c.tagCodes[0]}
-        className=" p-2"
-      >
-        {c.CatName}
-      </option>
-    );
   });
 
   return (
@@ -64,54 +66,7 @@ export const Shop = () => {
 
       <main className=" max-w-[1700px] mx-auto">
         <section className=" p-3" id="products-market">
-          <div className=" flex flex-col items-center gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 md:flex md:flex-row">
-            <select
-              name="categories"
-              id="categories"
-              className=" border p-3 w-full max-w-[200px]"
-              onChange={(e) => setCategoryOption(e.target.value)}
-            >
-              <option value={""}>Categories</option>
-              {displayCategories}
-            </select>
-
-            <select
-              name="sortby"
-              id="sortby"
-              className=" border p-3 w-full max-w-[200px]"
-              onChange={(e) => setSortByOption(e.target.value)}
-            >
-              <option value={""}>Sort By</option>
-              <option value={"stock"}>Stock</option>
-              <option value={"ascPrice"}>Ascend Price</option>
-              <option value={"descPrice"}>Descend Price</option>
-              <option value={"newProduct"}>New Product</option>
-            </select>
-
-            <div className=" flex items-center justify-between border w-full md:max-w-[500px]">
-              <input
-                type="text"
-                placeholder="Search"
-                id="filter-search"
-                className=" outline-none w-full h-full p-3 bg-transparent"
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-              <Search size={22} />
-            </div>
-
-            <button
-              onClick={() =>
-                navigate(
-                  `/shop/${1}${categoryOption && "/" + categoryOption}${
-                    sortByOption && "/" + sortByOption
-                  }${searchValue && "/" + searchValue}`
-                )
-              }
-              className="  border p-3 w-full shadow-sm font-notable hover:shadow-md duration-150 sm:col-span-2 md:col-auto md:max-w-[150px]"
-            >
-              Filter
-            </button>
-          </div>
+          <Filter filterDispatch={filterDispatch} filterState={filterState} />
 
           <div className=" mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-9 xl:grid-cols-4 2xl:grid-cols-5">
             {displayProducts}
@@ -124,9 +79,12 @@ export const Shop = () => {
               page={Number(page)}
               onChange={(e, v) =>
                 navigate(
-                  `/shop/${v}${categoryOption && "/" + categoryOption}${
-                    sortby && "/" + sortby
-                  }${searchValue && "/" + searchValue}`
+                  `/shop/${v}${
+                    filterState.categoryOption &&
+                    "/" + filterState.categoryOption
+                  }${
+                    filterState.sortByOption && "/" + filterState.sortByOption
+                  }${filterState.searchValue && "/" + filterState.searchValue}`
                 )
               }
             />
