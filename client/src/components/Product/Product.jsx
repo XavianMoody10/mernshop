@@ -41,7 +41,9 @@ export const Product = ({ info }) => {
       quantity: quantity,
     };
 
-    dispatch(updateCart([...cart, newItem]));
+    const updatedCart = [...cart, newItem];
+
+    dispatch(updateCart(updatedCart));
   }
 
   function updateItemInCart() {
@@ -52,6 +54,12 @@ export const Product = ({ info }) => {
         return { ...i };
       }
     });
+
+    dispatch(updateCart(updatedCart));
+  }
+
+  function removeItemFromCart() {
+    const updatedCart = cart.filter((i) => i.code !== info.code);
 
     dispatch(updateCart(updatedCart));
   }
@@ -98,12 +106,20 @@ export const Product = ({ info }) => {
           </select>
 
           {cart.some((i) => i.code === info.code) ? (
-            <button
-              className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable"
-              onClick={updateItemInCart}
-            >
-              Update
-            </button>
+            <div className=" flex gap-1">
+              <button
+                className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable"
+                onClick={updateItemInCart}
+              >
+                Update
+              </button>
+              <button
+                className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable text-white bg-red-600"
+                onClick={removeItemFromCart}
+              >
+                Remove
+              </button>
+            </div>
           ) : (
             <button
               className=" border w-full py-4 shadow-sm hover:shadow-md duration-150 font-semibold font-notable"
