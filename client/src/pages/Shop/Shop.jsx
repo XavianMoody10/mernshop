@@ -94,7 +94,7 @@ export const Shop = () => {
             {displayProducts}
           </div>
 
-          {!isLoading && !isError && (
+          {!isLoading && page && !isError && (
             <div className=" flex items-center justify-center mt-16">
               <Pagination
                 count={numberOfPages}

@@ -35,6 +35,7 @@ export const Product = ({ info }) => {
 
   function addItemToCart() {
     const newItem = {
+      image: info.images[0].baseUrl || info.images[0].url,
       code: info.code,
       name: info.name,
       price: info.price.value,

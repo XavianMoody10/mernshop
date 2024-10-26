@@ -8,17 +8,18 @@ import {
 import { Shop } from "./pages/Shop/Shop";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { Cart } from "./pages/Cart/Cart";
 
 const App = () => {
   // Routes and pages
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
-        {/* <Route index element={<Shop />} /> */}
         <Route
           path="/shop/:page?/:category?/:sortby?/:search?"
           element={<Shop />}
         />
+        <Route path="/cart" element={<Cart />} />
       </Route>
     )
   );
