@@ -9,8 +9,14 @@ export const handlers = [
     const page = url.searchParams.get("page");
     const category = url.searchParams.get("category");
     const search = url.searchParams.get("search");
+    const sortBy = url.searchParams.get("sortBy");
 
-    if (page === "1" && category === "men_all" && search === "slim") {
+    if (
+      page === "1" &&
+      category === "men_all" &&
+      search === "slim" &&
+      sortBy === "ascPrice"
+    ) {
       return HttpResponse.json(productsListPage2Data);
     } else {
       return HttpResponse.json(productsListData);

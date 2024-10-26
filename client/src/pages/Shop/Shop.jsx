@@ -12,21 +12,22 @@ export const Shop = () => {
   const [categories, setCategories] = useState([]);
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [categoryOption, setCategoryOption] = useState("");
+  const [sortByOption, setSortByOption] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  const { page, category, search } = useParams();
+  const { page, category, search, sortby } = useParams();
   const navigate = useNavigate();
 
   // Get products from api
   async function getProducts() {
     setProducts([]);
-    const data = await getProductsRequest(page, category, search);
+    const data = await getProductsRequest(page, category, search, sortby);
     setProducts(data.results);
     setNumberOfPages(data.pagination.numberOfPages);
   }
 
   useEffect(() => {
     getProducts();
-  }, [page, category, search]);
+  }, [page, category, search, sortby]);
 
   // Get categories from api
   async function getCategories() {
@@ -74,6 +75,19 @@ export const Shop = () => {
               {displayCategories}
             </select>
 
+            <select
+              name="sortby"
+              id="sortby"
+              className=" border p-3 w-full max-w-[200px]"
+              onChange={(e) => setSortByOption(e.target.value)}
+            >
+              <option value={""}>Sort By</option>
+              <option value={"stock"}>Stock</option>
+              <option value={"ascPrice"}>Ascend Price</option>
+              <option value={"descPrice"}>Descend Price</option>
+              <option value={"newProduct"}>New Product</option>
+            </select>
+
             <div className=" flex items-center justify-between border w-full md:max-w-[500px]">
               <input
                 type="text"
@@ -89,8 +103,8 @@ export const Shop = () => {
               onClick={() =>
                 navigate(
                   `/shop/${1}${categoryOption && "/" + categoryOption}${
-                    searchValue && "/" + searchValue
-                  }`
+                    sortByOption && "/" + sortByOption
+                  }${searchValue && "/" + searchValue}`
                 )
               }
               className="  border p-3 w-full shadow-sm font-notable hover:shadow-md duration-150 sm:col-span-2 md:col-auto md:max-w-[150px]"
@@ -108,7 +122,13 @@ export const Shop = () => {
               count={numberOfPages}
               size="large"
               page={Number(page)}
-              onChange={(e, v) => navigate(`/shop/${v}`)}
+              onChange={(e, v) =>
+                navigate(
+                  `/shop/${v}${categoryOption && "/" + categoryOption}${
+                    sortby && "/" + sortby
+                  }${searchValue && "/" + searchValue}`
+                )
+              }
             />
           </div>
         </section>

@@ -13,7 +13,10 @@ const App = () => {
     createRoutesFromElements(
       <Route path="/">
         {/* <Route index element={<Shop />} /> */}
-        <Route path="/shop/:page?/:category?/:search?" element={<Shop />} />
+        <Route
+          path="/shop/:page?/:category?/:sortby?/:search?"
+          element={<Shop />}
+        />
       </Route>
     )
   );
