@@ -42,6 +42,7 @@ export const Shop = () => {
   const [products, setProducts] = useState([]);
   const [numberOfPages, setNumberOfPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const { page, category, search, sortby } = useParams();
   const navigate = useNavigate();
 
@@ -50,8 +51,14 @@ export const Shop = () => {
     setIsLoading(true);
     setProducts([]);
     const data = await getProductsRequest(page, category, search, sortby);
-    setProducts(data.results);
-    setNumberOfPages(data.pagination.numberOfPages);
+
+    if (data === "Error getting products") {
+      setIsError(true);
+    } else {
+      setProducts(data.results);
+      setNumberOfPages(data.pagination.numberOfPages);
+    }
+
     setIsLoading(false);
   }
 
@@ -69,8 +76,17 @@ export const Shop = () => {
       <Header />
 
       <main className=" max-w-[1700px] mx-auto">
-        <section className=" p-3" id="products-market">
+        <section className=" p-3 relative" id="products-market">
           <LoadingOverlay isLoading={isLoading} />
+
+          {isError && !isLoading && (
+            <div className=" fixed top-0 right-0 bottom-0 left-0 bg-white h-screen w-full flex flex-col gap-6 items-center justify-center">
+              <p className=" font-bold text-4xl">Loading error</p>
+              <button className="border p-3 w-full shadow-sm font-notable hover:shadow-md duration-150 max-w-[300px]">
+                Try loading again
+              </button>
+            </div>
+          )}
 
           <Filter filterDispatch={filterDispatch} filterState={filterState} />
 
@@ -78,23 +94,27 @@ export const Shop = () => {
             {displayProducts}
           </div>
 
-          <div className=" flex items-center justify-center mt-16">
-            <Pagination
-              count={numberOfPages}
-              size="large"
-              page={Number(page)}
-              onChange={(e, v) =>
-                navigate(
-                  `/shop/${v}${
-                    filterState.categoryOption &&
-                    "/" + filterState.categoryOption
-                  }${
-                    filterState.sortByOption && "/" + filterState.sortByOption
-                  }${filterState.searchValue && "/" + filterState.searchValue}`
-                )
-              }
-            />
-          </div>
+          {!isLoading && !isError && (
+            <div className=" flex items-center justify-center mt-16">
+              <Pagination
+                count={numberOfPages}
+                size="large"
+                page={Number(page)}
+                onChange={(e, v) =>
+                  navigate(
+                    `/shop/${v}${
+                      filterState.categoryOption &&
+                      "/" + filterState.categoryOption
+                    }${
+                      filterState.sortByOption && "/" + filterState.sortByOption
+                    }${
+                      filterState.searchValue && "/" + filterState.searchValue
+                    }`
+                  )
+                }
+              />
+            </div>
+          )}
         </section>
       </main>
     </>

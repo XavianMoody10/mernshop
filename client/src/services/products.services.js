@@ -15,6 +15,7 @@ async function getProductsRequest(page, category, search, sortBy) {
     return response.data;
   } catch (error) {
     console.log(error);
+    return "Error getting products";
   }
 }
 

@@ -23,6 +23,8 @@ export const handlers = [
     } else {
       return HttpResponse.json(productsListData);
     }
+
+    // return HttpResponse.json(null, { status: 401 });
   }),
 
   http.get("http://localhost:3001/categories", () => {
