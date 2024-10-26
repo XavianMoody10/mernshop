@@ -5,12 +5,18 @@ import { useNavigate } from "react-router-dom";
 
 export const Filter = ({ filterDispatch, filterState }) => {
   const [categories, setCategories] = useState([]);
+  const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
 
   // Get categories from api
   async function getCategories() {
     const data = await getCategoriesRequest();
-    setCategories(data);
+
+    if (data === "Error getting categories") {
+      setIsError(true);
+    } else {
+      setCategories(data);
+    }
   }
 
   useEffect(() => {
@@ -33,17 +39,19 @@ export const Filter = ({ filterDispatch, filterState }) => {
 
   return (
     <div className=" flex flex-col items-center gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 md:flex md:flex-row">
-      <select
-        name="categories"
-        id="categories"
-        className=" border p-3 w-full md:max-w-[200px]"
-        onChange={(e) =>
-          filterDispatch({ type: "set_category", payload: e.target.value })
-        }
-      >
-        <option value={""}>Categories</option>
-        {displayCategories}
-      </select>
+      {!isError && (
+        <select
+          name="categories"
+          id="categories"
+          className=" border p-3 w-full md:max-w-[200px]"
+          onChange={(e) =>
+            filterDispatch({ type: "set_category", payload: e.target.value })
+          }
+        >
+          <option value={""}>Categories</option>
+          {displayCategories}
+        </select>
+      )}
 
       <select
         name="sortby"

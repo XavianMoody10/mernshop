@@ -28,6 +28,7 @@ export const handlers = [
   }),
 
   http.get("http://localhost:3001/categories", () => {
-    return HttpResponse.json(categoriesData);
+    // return HttpResponse.json(categoriesData);
+    return HttpResponse.json(null, { status: 401 });
   }),
 ];
