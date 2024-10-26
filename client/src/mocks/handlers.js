@@ -1,4 +1,4 @@
-import { http, HttpResponse } from "msw";
+import { delay, http, HttpResponse } from "msw";
 import productsListData from "./data/productsList.data";
 import productsListPage2Data from "./data/productsListPage2.data";
 import categoriesData from "./data/categories.data";
@@ -10,6 +10,8 @@ export const handlers = [
     const category = url.searchParams.get("category");
     const search = url.searchParams.get("search");
     const sortBy = url.searchParams.get("sortBy");
+
+    await delay(3000);
 
     if (
       page === "1" &&

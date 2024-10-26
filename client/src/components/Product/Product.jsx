@@ -36,7 +36,7 @@ export const Product = ({ info }) => {
           ref={ref}
           initial={{ opacity: 0 }}
           animate={{ opacity: isImageLoaded ? 1 : 0 }}
-          transition={{ delay: 1 }}
+          transition={{ delay: isImageLoaded ? 1 : 0 }}
         >
           {isProductVisible && (
             <div>

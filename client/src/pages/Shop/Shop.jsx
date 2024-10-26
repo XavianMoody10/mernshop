@@ -5,6 +5,7 @@ import { Product } from "../../components/Product/Product";
 import Pagination from "@mui/material/Pagination";
 import { useNavigate, useParams } from "react-router-dom";
 import { Filter } from "../../components/Filter/Filter";
+import { LoadingOverlay } from "../../components/LoadingOverlay/LoadingOverlay";
 
 function filterReducer(state, action) {
   switch (action.type) {
@@ -40,15 +41,18 @@ export const Shop = () => {
 
   const [products, setProducts] = useState([]);
   const [numberOfPages, setNumberOfPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const { page, category, search, sortby } = useParams();
   const navigate = useNavigate();
 
   // Get products from api
   async function getProducts() {
+    setIsLoading(true);
     setProducts([]);
     const data = await getProductsRequest(page, category, search, sortby);
     setProducts(data.results);
     setNumberOfPages(data.pagination.numberOfPages);
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -66,6 +70,8 @@ export const Shop = () => {
 
       <main className=" max-w-[1700px] mx-auto">
         <section className=" p-3" id="products-market">
+          <LoadingOverlay isLoading={isLoading} />
+
           <Filter filterDispatch={filterDispatch} filterState={filterState} />
 
           <div className=" mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-9 xl:grid-cols-4 2xl:grid-cols-5">
